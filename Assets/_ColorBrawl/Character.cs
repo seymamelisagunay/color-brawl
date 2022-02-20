@@ -8,15 +8,11 @@ public class Character : MonoBehaviour
     public float Speed;
     public float JumpHeight;
 
-    public bool Touching;
-    public string touchSide;
     public Vector2 moveDirection;
     private float prevY;
     private float prevX;
-    public bool InAir;
     private Rigidbody2D rigidBody;
     public bool Jump;
-    public bool OnEdge;
     public GameObject touchingPlatform;
     public SpriteRenderer sprite;
     public TouchDetector leftDetector;
@@ -26,66 +22,66 @@ public class Character : MonoBehaviour
     public string characterID;
     public GameObject visual;
     public LevelManager levelManager;
-    private float jumpTimeout = 0.1f;
-    private float jumpTapTime;
+    private float jumpTimeout = 0.2f;
+    private float jumpExpiredTime;
+
     void Awake()
     {
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         rigidBody.isKinematic = true;
+    }
 
-    }
-    public void EnableMovement() {
-        if(!gameObject.active) return;
-        
+    public void EnableMovement()
+    {
+        if (!gameObject.active) return;
+
         rigidBody.isKinematic = false;
-        rigidBody.gravityScale=3f;
+        rigidBody.gravityScale = 3f;
     }
-    public void Stop() {
-        if(gameObject.active) {
+
+    public void Stop()
+    {
+        if (gameObject.active)
+        {
             rigidBody.velocity = Vector2.zero;
-            rigidBody.gravityScale=0.0f;
+            rigidBody.gravityScale = 0.0f;
         }
     }
+
     public void JumpUp()
     {
-        if (Touching == false)
-        {
-            Jump = true;
-        }
-
+        Jump = true;
+        jumpExpiredTime = Time.time + jumpTimeout;
     }
+
     void Update()
     {
+        if (levelManager.Ended)
+        {
+            Stop();
+        }
 
-        if (levelManager.Ended) {
-              Stop();
-        };
         if (levelManager.Waiting) return;
         if (Bot) return;
 
         if (Input.GetMouseButtonDown(0))
         {
             JumpUp();
-            Touching = true;
-            jumpTapTime = Time.time + jumpTimeout;
-
-
         }
-        else
+
+        if (Jump && Time.time > jumpExpiredTime)
         {
-            Touching = false;
-            jumpTapTime = Time.time;
+            Jump = false;
         }
-
     }
+
     void FixedUpdate()
     {
         if (levelManager.Waiting) return;
         if (levelManager.Ended) return;
 
-        if (Jump )
+        if (Jump)
         {
-            if(Time.time < jumpTimeout) return;
             if (bottomDetector.Touching())
             {
                 rigidBody.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
@@ -109,18 +105,18 @@ public class Character : MonoBehaviour
                     visual.transform.localRotation = Quaternion.Euler(0, 180, 0);
                 }
             }
-
         }
-        else if ((rightDetector.Touching() || leftDetector.Touching()) && !bottomDetector.Touching())
+        else if ((rightDetector.Touching() || leftDetector.Touching())
+                 && !bottomDetector.Touching())
         {
             var vel = rigidBody.velocity;
             vel.y /= 1.15f;
             rigidBody.velocity = vel;
         }
-        if(rigidBody.isKinematic) return;
+
+        if (rigidBody.isKinematic) return;
         var velocity = rigidBody.velocity;
         velocity.x = moveDirection.x * Speed * Time.fixedDeltaTime;
         rigidBody.velocity = velocity;
-
     }
 }
