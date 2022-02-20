@@ -35,8 +35,16 @@ public class Character : MonoBehaviour
 
     }
     public void EnableMovement() {
-        if(gameObject.active)
+        if(!gameObject.active) return;
+        
         rigidBody.isKinematic = false;
+        rigidBody.gravityScale=3f;
+    }
+    public void Stop() {
+        if(gameObject.active) {
+            rigidBody.velocity = Vector2.zero;
+            rigidBody.gravityScale=0.0f;
+        }
     }
     public void JumpUp()
     {
@@ -49,7 +57,9 @@ public class Character : MonoBehaviour
     void Update()
     {
 
-        if (levelManager.Ended) return;
+        if (levelManager.Ended) {
+              Stop();
+        };
         if (levelManager.Waiting) return;
         if (Bot) return;
 
@@ -107,6 +117,7 @@ public class Character : MonoBehaviour
             vel.y /= 1.15f;
             rigidBody.velocity = vel;
         }
+        if(rigidBody.isKinematic) return;
         var velocity = rigidBody.velocity;
         velocity.x = moveDirection.x * Speed * Time.fixedDeltaTime;
         rigidBody.velocity = velocity;

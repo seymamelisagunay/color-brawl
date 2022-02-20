@@ -7,8 +7,10 @@ public class CountDown : MonoBehaviour
     public TMPro.TMP_Text counDownText;
     private float nextTimeUpdate;
     private int counts;
+    private bool countedDown;
     public void StartCountdown(int duration)
     {
+        countedDown = false;
         counts = duration;
         nextTimeUpdate = Time.time + 1f;
 
@@ -18,6 +20,7 @@ public class CountDown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(countedDown) return;
         if (Time.time > nextTimeUpdate)
         {
          
@@ -27,7 +30,8 @@ public class CountDown : MonoBehaviour
             if (counts < 1)
             {
                 hud.SetActive(true);
-                gameObject.SetActive(false);
+                counDownText.text = "";
+                countedDown = true;
                 return;
             }
         }

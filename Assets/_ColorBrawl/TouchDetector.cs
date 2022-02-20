@@ -7,10 +7,9 @@ public class TouchDetector : MonoBehaviour
     // Start is called before the first frame update
     public Character character;
     public int CollisionCount;
-    private LevelManager levelManager;
+    public LevelManager levelManager;
 
     void Start() {
-        levelManager = GameObject.FindObjectOfType<LevelManager>();
     }
     void OnTriggerEnter2D(Collider2D col)
     {

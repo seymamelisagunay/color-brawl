@@ -32,6 +32,7 @@ public class LevelManager : MonoBehaviour
     public CountDown countDown;
     public Action onLevelLoaded;
     private float EndWaitingTime;
+    private bool EndWaited;
     void Awake()
     {
         gameManager = GameObject.FindObjectOfType<GameManager>();
@@ -41,6 +42,7 @@ public class LevelManager : MonoBehaviour
     public void LoadLevel()
     {
         Waiting = true;
+        EndWaited = false;
         hud.SetActive(true);
 
         bluePlayer.transform.position = blueSpawn.transform.position;
@@ -68,6 +70,7 @@ public class LevelManager : MonoBehaviour
             countDown.gameObject.SetActive(true);
             countDown.StartCountdown((int)WaitingTime);
         }
+        UpdateScore();
         onLevelLoaded?.Invoke();
 
     }
@@ -100,12 +103,17 @@ public class LevelManager : MonoBehaviour
         blueScoreText.text = BlueScore.ToString();
         emptyAmountText.text = (BlockCount - RedScore - BlueScore).ToString();
     }
+    public void EndLevel() {
+            gameObject.SetActive(false);
+            gameManager.EndLevel(BlueScore, RedScore);
+
+            EndWaited = true;
+    }
     void Update()
     {
-        if (Time.time > EndWaitingTime)
+        if (Ended && Time.time > EndWaitingTime && !EndWaited )
         {
-            hud.SetActive(false);
-            gameManager.EndLevel(BlueScore, RedScore);
+            EndLevel();
             return;
         }
         if (Ended) return;
@@ -113,6 +121,9 @@ public class LevelManager : MonoBehaviour
         if (Time.time > matchEndTime)
         {
             Ended = true;
+            bluePlayer.GetComponent<Character>().Stop();
+            redPlayer.GetComponent<Character>().Stop();
+            countDown.counDownText.text = "MATCH END";
 
         }
         else if (Waiting && Time.time > LevelStartTime)

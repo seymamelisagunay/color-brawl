@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour
     public GameObject lobbyPanel;
 
     public List<LevelManager> levels;
-    public int currentLevelIndex;
+    public int currentLevelIndex => PlayerPrefs.GetInt("currentLevelIndex", 0);
 
+    void Awake() {
+        Application.targetFrameRate = 60;
+    }
     void Start() {
         StartLevel();
     }
@@ -28,6 +31,11 @@ public class GameManager : MonoBehaviour
     public void EndLevel(int BlueScore, int RedScore) {
         matchResultPanel.gameObject.SetActive(true);
         matchResultPanel.Fill(BlueScore, RedScore);
-        currentLevelIndex = 1;
+        var nextLevelIndex = currentLevelIndex + 1;
+        nextLevelIndex = nextLevelIndex % levels.Count;
+        if(nextLevelIndex == 0) {
+            nextLevelIndex++;
+        }
+        PlayerPrefs.SetInt("currentLevelIndex", nextLevelIndex);
     }
 }
