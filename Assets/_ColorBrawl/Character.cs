@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using _ColorBrawl;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    // Start is called before the first frame update
     private float Speed = 250f;
     private float JumpHeight = 600f;
     private float JumpRange = 300f;
@@ -27,14 +23,36 @@ public class Character : MonoBehaviour
     public LevelManager levelManager;
     private float jumpTimeout = 0.2f;
     private float jumpExpiredTime;
-    private float sliceTimer;
-    private bool onSlice;
-    private float sliceBeginTime;
+    private float slideTimer;
+    private bool Slide;
+    private float slideBeginTime;
+    private float _jumpDuration = 0.45f;
+    private float _afterJumpSliceStartTime;
 
     private void Awake()
     {
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         rigidBody.isKinematic = true;
+        leftDetector.OnFirstTouch += OnFirstTouch;
+        rightDetector.OnFirstTouch += OnFirstTouch;
+        bottomDetector.OnFirstTouch += OnBottomFirstTouch;
+    }
+
+    private void OnBottomFirstTouch()
+    {
+        Slide = false;
+    }
+
+    private void OnFirstTouch()
+    {
+        StartSlide();
+    }
+
+    private void StartSlide()
+    {
+        if (Slide) return;
+        Slide = true;
+        slideBeginTime = Time.time;
     }
 
     public void EnableMovement()
@@ -85,62 +103,55 @@ public class Character : MonoBehaviour
     {
         if (levelManager.Waiting) return;
         if (levelManager.Ended) return;
+        if (rigidBody.isKinematic) return;
+
+
+        if (_afterJumpSliceStartTime < Time.time
+            && !bottomDetector.Touching() && (rightDetector.Touching() || leftDetector.Touching()))
+        {
+            StartSlide();
+        }
+
+        var velocity = rigidBody.velocity;
+        velocity.x = moveDirection.x * Speed * Time.fixedDeltaTime;
+        rigidBody.velocity = velocity;
+
 
         if (Jump)
         {
             if (bottomDetector.Touching())
             {
                 Jump = false;
+                Slide = false;
                 rigidBody.velocity = Vector2.zero;
                 rigidBody.AddForce(Vector2.up * JumpHeight);
+                _afterJumpSliceStartTime = Time.time + _jumpDuration;
             }
             else if (rightDetector.Touching()
                      || leftDetector.Touching())
             {
                 Jump = false;
-                onSlice = false;
+                Slide = false;
                 moveDirection = -moveDirection;
                 rigidBody.velocity = Vector2.zero;
-                rigidBody.AddForce(Vector2.up * JumpHeight
-                                   + moveDirection * JumpRange);
+                rigidBody.AddForce(Vector2.up * JumpHeight);
 
                 if (moveDirection == Vector2.right)
                     visual.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 else
                     visual.transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+                _afterJumpSliceStartTime = Time.time + _jumpDuration;
             }
         }
-        else if ((rightDetector.Touching() || leftDetector.Touching())
-                 && !bottomDetector.Touching())
-        {
-            if (onSlice == false)
-            {
-                sliceBeginTime = Time.time;
-                onSlice = true;
-            }
 
-            var slicePassTime = Time.time - sliceBeginTime;
+
+        if (Slide)
+        {
+            var slicePassTime = Time.time - slideBeginTime;
             var vel = rigidBody.velocity;
             vel.y = sideSlipSpeed * Mathf.Lerp(0, -5, slicePassTime / 2f);
             rigidBody.velocity = vel;
-        }
-        else
-        {
-            if (bottomDetector.Touching() &&
-                (rightDetector.Touching() || leftDetector.Touching()))
-            {
-                moveDirection = -moveDirection;
-            }
-        }
-
-        if (rigidBody.isKinematic) return;
-
-        if (bottomDetector.Touching())
-        {
-            var velocity = rigidBody.velocity;
-            velocity.x = moveDirection.x * Speed * Time.fixedDeltaTime;
-            rigidBody.velocity = velocity;
-            onSlice = false;
         }
     }
 }
