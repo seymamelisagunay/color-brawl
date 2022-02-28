@@ -1,23 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+using _ColorBrawl;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public float Speed;
-    public float JumpHeight;
+    private float Speed = 250f;
+    private float JumpHeight = 600f;
+    private float JumpRange = 300f;
+    private float sideSlipSpeed = 2f;
 
-    public bool Touching;
-    public string touchSide;
     public Vector2 moveDirection;
     private float prevY;
     private float prevX;
-    public bool InAir;
     private Rigidbody2D rigidBody;
     public bool Jump;
-    public bool OnEdge;
-    public GameObject touchingPlatform;
     public SpriteRenderer sprite;
     public TouchDetector leftDetector;
     public TouchDetector rightDetector;
@@ -26,101 +21,137 @@ public class Character : MonoBehaviour
     public string characterID;
     public GameObject visual;
     public LevelManager levelManager;
-    private float jumpTimeout = 0.1f;
-    private float jumpTapTime;
-    void Awake()
+    private float jumpTimeout = 0.2f;
+    private float jumpExpiredTime;
+    private float slideTimer;
+    private bool Slide;
+    private float slideBeginTime;
+    private float _jumpDuration = 0.45f;
+    private float _afterJumpSliceStartTime;
+
+    private void Awake()
     {
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         rigidBody.isKinematic = true;
+        leftDetector.OnFirstTouch += OnFirstTouch;
+        rightDetector.OnFirstTouch += OnFirstTouch;
+        bottomDetector.OnFirstTouch += OnBottomFirstTouch;
+    }
 
+    private void OnBottomFirstTouch()
+    {
+        Slide = false;
     }
-    public void EnableMovement() {
-        if(!gameObject.active) return;
-        
+
+    private void OnFirstTouch()
+    {
+        StartSlide();
+    }
+
+    private void StartSlide()
+    {
+        if (Slide) return;
+        Slide = true;
+        slideBeginTime = Time.time;
+    }
+
+    public void EnableMovement()
+    {
+        if (!gameObject.active) return;
+
         rigidBody.isKinematic = false;
-        rigidBody.gravityScale=3f;
+        rigidBody.gravityScale = 3f;
     }
-    public void Stop() {
-        if(gameObject.active) {
+
+    public void Stop()
+    {
+        if (gameObject.active)
+        {
             rigidBody.velocity = Vector2.zero;
-            rigidBody.gravityScale=0.0f;
+            rigidBody.gravityScale = 0.0f;
         }
     }
+
     public void JumpUp()
     {
-        if (Touching == false)
+        Jump = true;
+        jumpExpiredTime = Time.time + jumpTimeout;
+    }
+
+    private void Update()
+    {
+        if (levelManager.Ended)
         {
-            Jump = true;
+            Stop();
         }
 
-    }
-    void Update()
-    {
-
-        if (levelManager.Ended) {
-              Stop();
-        };
         if (levelManager.Waiting) return;
         if (Bot) return;
 
         if (Input.GetMouseButtonDown(0))
         {
             JumpUp();
-            Touching = true;
-            jumpTapTime = Time.time + jumpTimeout;
-
-
         }
-        else
+
+        if (Jump && Time.time > jumpExpiredTime)
         {
-            Touching = false;
-            jumpTapTime = Time.time;
+            Jump = false;
         }
-
     }
-    void FixedUpdate()
+
+    private void FixedUpdate()
     {
         if (levelManager.Waiting) return;
         if (levelManager.Ended) return;
+        if (rigidBody.isKinematic) return;
 
-        if (Jump )
+
+        if (_afterJumpSliceStartTime < Time.time
+            && !bottomDetector.Touching() && (rightDetector.Touching() || leftDetector.Touching()))
         {
-            if(Time.time < jumpTimeout) return;
-            if (bottomDetector.Touching())
-            {
-                rigidBody.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
-                rigidBody.velocity = Vector2.zero;
-                Jump = false;
-                rigidBody.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
-            }
-            else if (rightDetector.Touching() || leftDetector.Touching())
-            {
-                moveDirection = -moveDirection;
-                rigidBody.velocity = Vector2.zero;
-                Jump = false;
-                rigidBody.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
-
-                if (moveDirection == Vector2.right)
-                {
-                    visual.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                }
-                else
-                {
-                    visual.transform.localRotation = Quaternion.Euler(0, 180, 0);
-                }
-            }
-
+            StartSlide();
         }
-        else if ((rightDetector.Touching() || leftDetector.Touching()) && !bottomDetector.Touching())
-        {
-            var vel = rigidBody.velocity;
-            vel.y /= 1.15f;
-            rigidBody.velocity = vel;
-        }
-        if(rigidBody.isKinematic) return;
+
         var velocity = rigidBody.velocity;
         velocity.x = moveDirection.x * Speed * Time.fixedDeltaTime;
         rigidBody.velocity = velocity;
 
+
+        if (Jump)
+        {
+            if (bottomDetector.Touching())
+            {
+                Jump = false;
+                Slide = false;
+                rigidBody.velocity = Vector2.zero;
+                rigidBody.AddForce(Vector2.up * JumpHeight);
+                _afterJumpSliceStartTime = Time.time + _jumpDuration;
+            }
+            else if (rightDetector.Touching()
+                     || leftDetector.Touching())
+            {
+                Jump = false;
+                Slide = false;
+                moveDirection = -moveDirection;
+                rigidBody.velocity = Vector2.zero;
+                rigidBody.AddForce(Vector2.up * JumpHeight);
+
+                if (moveDirection == Vector2.right)
+                    visual.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                else
+                    visual.transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+                _afterJumpSliceStartTime = Time.time + _jumpDuration;
+            }
+        }
+
+
+        if (Slide)
+        {
+            var slicePassTime = Time.time - slideBeginTime;
+            var vel = rigidBody.velocity;
+            vel.y = sideSlipSpeed * Mathf.Lerp(0, -5, slicePassTime / 2f);
+            rigidBody.velocity = vel;
+        }
     }
 }

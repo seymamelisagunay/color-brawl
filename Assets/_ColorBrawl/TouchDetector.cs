@@ -1,32 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class TouchDetector : MonoBehaviour
+namespace _ColorBrawl
 {
-    // Start is called before the first frame update
-    public Character character;
-    public int CollisionCount;
-    public LevelManager levelManager;
-
-    void Start() {
-    }
-    void OnTriggerEnter2D(Collider2D col)
+    public class TouchDetector : MonoBehaviour
     {
-        CollisionCount++;
-        if(col.gameObject.tag == "Platform") {
-            col.gameObject.GetComponent<Block>().SetOwner(character);
-            levelManager.UpdateScore();
+        // Start is called before the first frame update
+        public Character character;
+        public int CollisionCount;
+        public LevelManager levelManager;
+        public Action OnFirstTouch { get; set; }
+
+        void OnTriggerEnter2D(Collider2D col)
+        {
+            if (CollisionCount == 0)
+            {
+                OnFirstTouch?.Invoke();
+            }
+
+            CollisionCount++;
+            if (col.gameObject.tag == "Platform")
+            {
+                col.gameObject.GetComponent<Block>().SetOwner(character);
+                levelManager.UpdateScore();
+            }
+        }
+
+        void OnTriggerExit2D(Collider2D col)
+        {
+            CollisionCount--;
+        }
+
+        public bool Touching()
+        {
+            return CollisionCount > 0;
         }
     }
-    
-    void OnTriggerExit2D(Collider2D col)
-    {
-        CollisionCount--;
-    }
-    public bool Touching() {
-        return  CollisionCount > 0;
-
-    }
-
 }
