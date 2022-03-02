@@ -79,6 +79,7 @@ namespace _ColorBrawl
 
             UpdateScore();
             onLevelLoaded?.Invoke();
+
         }
 
         public void StartLevel()
