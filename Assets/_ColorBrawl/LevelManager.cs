@@ -59,7 +59,9 @@ namespace _ColorBrawl
             {
                 var block = platform.GetComponent<Block>();
                 Debug.Log(block.gameObject.name);
-                block.visual.GetComponent<SpriteRenderer>().color = defaultBlockColor;
+                block.visual.gameObject.SetActive(true);
+                block.redSprite.gameObject.SetActive(false);
+                block.blueSprite.gameObject.SetActive(false);
                 block.ownerID = "";
                 blocks.Add(block);
             }

@@ -8,18 +8,35 @@ public class Block : MonoBehaviour
     // Start is called before the first frame update
     public string ownerID;
     public Transform visual;
+    public SpriteRenderer blueSprite;
+    public SpriteRenderer redSprite;
     void Awake()
     {
-        visual = gameObject.transform.GetChild(0);
     }
 
     public void SetOwner(Character character)
     {
         ownerID = character.characterID;
-        visual.gameObject.GetComponent<SpriteRenderer>().color = character.sprite.color;
-        visual.DOScale(1.2f, 0.05f).OnComplete(() =>
+        if(ownerID == "red") {
+            visual.gameObject.SetActive(false);
+            blueSprite.gameObject.SetActive(false);
+            redSprite.gameObject.SetActive(true);
+        } else if(ownerID == "blue"){
+            visual.gameObject.SetActive(false);
+            blueSprite.gameObject.SetActive(true);
+            redSprite.gameObject.SetActive(false);
+        }
+        visual.DOScale(.25f, 0.05f).OnComplete(() =>
         {
-            visual.DOScale(1f, 0.05f);
+            visual.DOScale(0.19f, 0.05f);
+        });
+        blueSprite.transform.DOScale(.25f, 0.05f).OnComplete(() =>
+        {
+            blueSprite.transform.DOScale(0.19f, 0.05f);
+        });
+        redSprite.transform.DOScale(.25f, 0.05f).OnComplete(() =>
+        {
+            redSprite.transform.DOScale(0.19f, 0.05f);
         });
     }
 }
