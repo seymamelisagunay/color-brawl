@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _ColorBrawl
 {
@@ -67,6 +68,8 @@ namespace _ColorBrawl
             BlueScore = 0;
             RedScore = 0;
             BlockCount = blocks.Count;
+            Debug.Log(BlockCount);
+            FindObjectOfType<Progress>().StartBlockCount(BlockCount);
             LevelStartTime = Time.time + WaitingTime;
             if (countDown)
             {
@@ -109,6 +112,7 @@ namespace _ColorBrawl
             redScoreText.text = RedScore.ToString();
             blueScoreText.text = BlueScore.ToString();
             emptyAmountText.text = (BlockCount - RedScore - BlueScore).ToString();
+            FindObjectOfType<Progress>().UpdateProgress(RedScore, BlueScore);
         }
 
         public void EndLevel()
