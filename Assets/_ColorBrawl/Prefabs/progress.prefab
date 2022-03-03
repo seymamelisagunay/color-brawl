@@ -71,8 +71,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 4, y: -0.74612045}
-  m_SizeDelta: {x: 36.842, y: -16.795}
+  m_AnchoredPosition: {x: 11.1, y: -4.6}
+  m_SizeDelta: {x: 26.4066, y: -27.925}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &648631654165506418
 CanvasRenderer:
@@ -722,7 +722,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.86666673, g: 0.15294118, b: 0.45882356, a: 1}
+  m_Color: {r: 1, g: 0.13725491, b: 0.34117648, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -764,17 +764,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 648631655809342602}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 648631656006397894}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -69.620926, y: 8.2296295}
-  m_SizeDelta: {x: 60.5927, y: 10.9259}
+  m_AnchoredPosition: {x: 41.3, y: 12.1}
+  m_SizeDelta: {x: 60.592697, y: 10.9259}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &648631655809342599
 CanvasRenderer:
@@ -806,8 +806,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: emma
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
+  m_sharedMaterial: {fileID: 7374927986402738804, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -943,7 +943,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 43.4, y: 7.6079}
+  m_AnchoredPosition: {x: 36.7, y: 11.1}
   m_SizeDelta: {x: 60.2548, y: 15.2156}
   m_Pivot: {x: -0.0000000037252903, y: 0.5}
 --- !u!222 &648631655963242239
@@ -976,8 +976,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: alex
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
+  m_sharedMaterial: {fileID: 7374927986402738804, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1037,7 +1037,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0.93325806, z: 0, w: 0.4402771}
+  m_margin: {x: 0, y: 0.93325806, z: 0, w: 1.8912048}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1068,18 +1068,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 648631656006397895}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 648631655809342597}
   m_Father: {fileID: 648631656093249323}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 248, y: -0.7459984}
-  m_SizeDelta: {x: 35.843002, y: -16.7947}
+  m_AnchoredPosition: {x: 219.9, y: -5}
+  m_SizeDelta: {x: 25.5194, y: -27.9248}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &648631656006397888
 CanvasRenderer:
@@ -1177,7 +1177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.26666668, g: 0.6, b: 0.9921569, a: 1}
+  m_Color: {r: 0.043137256, g: 0.48627454, b: 0.95294124, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
