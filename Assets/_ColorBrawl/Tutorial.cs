@@ -21,7 +21,8 @@ public class Tutorial : MonoBehaviour
         endWaiting = false;
          foreach (var block in levelManager.blocks)
         {
-            block.visual.GetComponent<SpriteRenderer>().color = tutorialTargetColor;
+            block.visual.gameObject.SetActive(false);
+            block.redSprite.gameObject.SetActive(true);
         }
     }
     // Update is called once per frame
