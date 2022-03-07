@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _ColorBrawl
 {
@@ -59,7 +60,9 @@ namespace _ColorBrawl
             {
                 var block = platform.GetComponent<Block>();
                 Debug.Log(block.gameObject.name);
-                block.visual.GetComponent<SpriteRenderer>().color = defaultBlockColor;
+                block.visual.gameObject.SetActive(true);
+                block.redSprite.gameObject.SetActive(false);
+                block.blueSprite.gameObject.SetActive(false);
                 block.ownerID = "";
                 blocks.Add(block);
             }
@@ -67,6 +70,8 @@ namespace _ColorBrawl
             BlueScore = 0;
             RedScore = 0;
             BlockCount = blocks.Count;
+            Debug.Log(BlockCount);
+            FindObjectOfType<Progress>().StartBlockCount(BlockCount);
             LevelStartTime = Time.time + WaitingTime;
             if (countDown)
             {
@@ -76,6 +81,7 @@ namespace _ColorBrawl
 
             UpdateScore();
             onLevelLoaded?.Invoke();
+
         }
 
         public void StartLevel()
@@ -109,6 +115,7 @@ namespace _ColorBrawl
             redScoreText.text = RedScore.ToString();
             blueScoreText.text = BlueScore.ToString();
             emptyAmountText.text = (BlockCount - RedScore - BlueScore).ToString();
+            FindObjectOfType<Progress>().UpdateProgress(RedScore, BlueScore);
         }
 
         public void EndLevel()
