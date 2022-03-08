@@ -48,7 +48,7 @@ namespace _Game.Scripts
             enabled = false;
             startButton.interactable = false;
             await Task.Delay(TimeSpan.FromSeconds(1));
-            scoreProgress.SetNames("Self", enemyName);
+            scoreProgress.SetNames("You", enemyName);
             gameObject.SetActive(false);
             gameManager.StartLevel();
         }
@@ -56,7 +56,7 @@ namespace _Game.Scripts
         public void ButtonPlayAgain()
         {
             enemyName = _nameList[Random.Range(0, _nameList.Length)];
-            scoreProgress.SetNames("Self", enemyName);
+            scoreProgress.SetNames("You", enemyName);
             gameManager.StartLevel();
         }
     }
