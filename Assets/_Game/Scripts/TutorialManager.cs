@@ -33,7 +33,7 @@ namespace _Game.Scripts
                 {
                     EndLevel();
                     gameManager.matchResultPanel.gameObject.SetActive(false);
-                    gameManager.lobbyPanel.gameObject.SetActive(true);
+                    gameManager.lobbyPanel.Show();
                     return;
                 }
 
