@@ -1,8 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using _Game.Scripts;
 using Leaderboard;
-using Newtonsoft.Json;
 using UI.Login;
 using UnityEditor;
 using UnityEngine;
@@ -57,7 +55,6 @@ public class UserManager : MonoBehaviour
             GetUserData();
             LoadHome();
         }
-
     }
 
     private void OnAcceptPolices()
@@ -99,7 +96,7 @@ public class UserManager : MonoBehaviour
             var modelVersion = PlayerPrefs.GetInt("model_version");
             if (modelVersion == ModelVersion)
             {
-                UserModel = JsonConvert.DeserializeObject<UserModel>(PlayerPrefs.GetString("user"));
+                UserModel = JsonUtility.FromJson<UserModel>(PlayerPrefs.GetString("user"));
                 if (UserModel == null)
                 {
                     Debug.LogError("Json convert fail");
@@ -122,7 +119,7 @@ public class UserManager : MonoBehaviour
         if (UserModel != null)
         {
             PlayerPrefs.SetInt("model_version", ModelVersion);
-            PlayerPrefs.SetString("user", JsonConvert.SerializeObject(UserModel));
+            PlayerPrefs.SetString("user", JsonUtility.ToJson(UserModel));
             PlayerPrefs.Save();
         }
     }
