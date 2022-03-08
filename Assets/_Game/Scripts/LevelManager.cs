@@ -43,7 +43,8 @@ namespace _Game.Scripts
             gameObject.SetActive(true);
             Waiting = true;
             EndWaited = false;
-
+            bluePlayer.gameObject.SetActive(true);
+            redPlayer.gameObject.SetActive(true);
             bluePlayer.transform.position = blueSpawn.transform.position;
             redPlayer.transform.position = redSpawn.transform.position;
 

@@ -58,7 +58,7 @@ namespace Leaderboard
         private void GenerateLeaderboard(string userName)
         {
             //Load usernames
-            var nameData = Resources.Load<TextAsset>("Configs/usernames").text;
+            var nameData = Resources.Load<TextAsset>("usernames").text;
             var nameList = nameData.Split('\n');
             var chooseNames = nameList.ToList().OrderBy(x => Guid.NewGuid()).Take(29).ToList();
 

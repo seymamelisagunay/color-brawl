@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using _Game.Scripts;
 using Leaderboard;
 using Newtonsoft.Json;
 using UI.Login;
@@ -33,6 +34,8 @@ public class UserManager : MonoBehaviour
     public UserModel UserModel { get; private set; }
     [SerializeField] private PoliciesPanel policiesPanel;
     [SerializeField] private NameChangePanel nameChangePanel;
+    [SerializeField] private GameObject lobbyPage;
+
     public LeaderboardManager leaderboardManager;
     private bool _first;
     private const int ModelVersion = 4;
@@ -55,10 +58,9 @@ public class UserManager : MonoBehaviour
         }
     }
 
-    private async void OnAcceptPolices()
+    private void OnAcceptPolices()
     {
         GetUserData();
-        await Task.Delay(TimeSpan.FromSeconds(1));
         nameChangePanel.Show(LoadHome);
     }
 
@@ -79,6 +81,7 @@ public class UserManager : MonoBehaviour
     private void LoadHome()
     {
         leaderboardManager = new LeaderboardManager(UserModel.name);
+        lobbyPage.SetActive(true);
     }
 
     private void GetUserData()

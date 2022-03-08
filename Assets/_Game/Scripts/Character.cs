@@ -115,6 +115,11 @@ namespace _Game.Scripts
                 StartSlide();
             }
 
+            if (!rightDetector.Touching() && !leftDetector.Touching())
+            {
+                Slide = false;
+            }
+
             var velocity = rigidBody.velocity;
             velocity.x = moveDirection.x * Speed * Time.fixedDeltaTime;
             rigidBody.velocity = velocity;
