@@ -34,6 +34,7 @@ namespace _Game.Scripts.Playground
             }
 
             CalculateStates();
+            Debug.LogWarning($"{name} borders created");
         }
 
         [ContextMenu("Calculate State")]
@@ -43,6 +44,7 @@ namespace _Game.Scripts.Playground
             units = gameObject.GetComponentsInChildren<Unit>().ToList();
             units.ForEach(x => x.Init(this));
             units.ForEach(x => x.SetState());
+            Debug.LogWarning($"{name} state calculated");
         }
 
         [ContextMenu("Update Items")]
@@ -52,14 +54,23 @@ namespace _Game.Scripts.Playground
             for (var i = 0; i < units.Count; i++)
             {
                 var oldUnit = units[i];
+                if (oldUnit == null)
+                {
+                    units.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
                 var unit = Instantiate(unitPrefab, parent);
                 unit.transform.localPosition = oldUnit.transform.localPosition;
+                unit.Disable = oldUnit.Disable;
                 unit.Init(this);
                 units[i] = unit;
                 DestroyImmediate(oldUnit.gameObject);
             }
 
             units.ForEach(x => x.SetState());
+            Debug.LogWarning($"{name} items updated");
         }
 
         [ContextMenu("Destroy All Units")]
@@ -67,6 +78,7 @@ namespace _Game.Scripts.Playground
         {
             units.ForEach(x => DestroyImmediate(x.gameObject));
             units.Clear();
+            Debug.LogWarning($"{name} destroyed");
         }
     }
 }

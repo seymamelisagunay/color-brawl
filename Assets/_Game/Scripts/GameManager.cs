@@ -1,53 +1,52 @@
-using System.Collections;
 using System.Collections.Generic;
-using _ColorBrawl;
-using _Game.Scripts;
+using _ColorBrawl.Scripts;
+using TMPro;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+namespace _Game.Scripts
 {
-    public MatchResult matchResultPanel;
-    public GameObject lobbyPanel;
-
-    public List<LevelManager> levels;
-    public int currentLevelIndex => PlayerPrefs.GetInt("currentLevelIndex", 0);
-
-    void Awake()
+    public class GameManager : MonoBehaviour
     {
-        Application.targetFrameRate = 60;
-    }
+        public MatchResult matchResultPanel;
+        public GameObject lobbyPanel;
+        public TMP_Text timeOutText;
+        public List<LevelManager> levels;
+        public TutorialManager tutorialManager;
+        public ScoreProgress scoreProgress;
 
-    void Start()
-    {
-        StartLevel();
-    }
+        public int CurrentLevelIndex => PlayerPrefs.GetInt("currentLevelIndex", -1);
 
-    public void StartLevel()
-    {
-        foreach (var level in levels)
+        private void Awake()
         {
-            level.gameObject.SetActive(false);
+            Application.targetFrameRate = 60;
         }
 
-        lobbyPanel.SetActive(false);
-        matchResultPanel.gameObject.SetActive(false);
-        // var currentLevel = levels[currentLevelIndex];
-        var currentLevel = levels[1];
-        currentLevel.gameObject.SetActive(true);
-        currentLevel.LoadLevel();
-    }
-
-    public void EndLevel(int BlueScore, int RedScore)
-    {
-        matchResultPanel.gameObject.SetActive(true);
-        matchResultPanel.Fill(BlueScore, RedScore);
-        var nextLevelIndex = currentLevelIndex + 1;
-        nextLevelIndex = nextLevelIndex % levels.Count;
-        if (nextLevelIndex == 0)
+        private void Start()
         {
-            nextLevelIndex++;
+            StartLevel();
         }
 
-        PlayerPrefs.SetInt("currentLevelIndex", nextLevelIndex);
+        public void StartLevel()
+        {
+            tutorialManager.gameObject.SetActive(false);
+            foreach (var level in levels)
+            {
+                level.gameObject.SetActive(false);
+            }
+
+            lobbyPanel.SetActive(false);
+            matchResultPanel.gameObject.SetActive(false);
+            var currentLevel = CurrentLevelIndex == -1 ? (ILevelManager) tutorialManager : levels[CurrentLevelIndex];
+            currentLevel.LoadLevel();
+        }
+
+        public void EndLevel(int blueScore, int redScore)
+        {
+            matchResultPanel.gameObject.SetActive(true);
+            matchResultPanel.Fill(blueScore, redScore);
+            var nextLevelIndex = CurrentLevelIndex + 1;
+            nextLevelIndex %= levels.Count;
+            PlayerPrefs.SetInt("currentLevelIndex", nextLevelIndex);
+        }
     }
 }

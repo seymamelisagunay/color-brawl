@@ -18,7 +18,7 @@ namespace _Game.Scripts
         public TouchDetector leftDetector;
         public TouchDetector rightDetector;
         public TouchDetector bottomDetector;
-        public LevelManager LevelManager { get; set; }
+        public ILevelManager LevelManager { get; set; }
         public bool Bot;
         public string characterID;
         public GameObject visual;
@@ -40,10 +40,10 @@ namespace _Game.Scripts
             enabled = false;
         }
 
-        public void StartLevel(LevelManager levelManager)
+        public void StartLevel(ILevelManager levelManager)
         {
+            gameObject.SetActive(true);
             LevelManager = levelManager;
-            if (!gameObject.active) return;
             enabled = true;
             rigidBody.isKinematic = false;
             rigidBody.gravityScale = 3f;

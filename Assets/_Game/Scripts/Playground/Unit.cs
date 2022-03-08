@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace _Game.Scripts.Playground
@@ -11,6 +12,7 @@ namespace _Game.Scripts.Playground
         public GameObject passiveMesh;
         public bool isOutside;
         private PlaygroundController _controller;
+        public bool Disable;
 
         public void Init(PlaygroundController controller)
         {
@@ -22,6 +24,11 @@ namespace _Game.Scripts.Playground
             cord = (nextX, nextY);
             isOutside = nextX == 0 || nextY == 0 || nextX == (controller.width - 1) ||
                         nextY == (controller.height - 1);
+
+            if (Disable)
+            {
+                isOutside = true;
+            }
         }
 
         public void SetState()

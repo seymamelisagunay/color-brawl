@@ -1,24 +1,29 @@
 using System;
 using System.Collections.Generic;
 using _ColorBrawl.Scripts;
-using TMPro;
 using UnityEngine;
 
 namespace _Game.Scripts
 {
-    public class LevelManager : MonoBehaviour
+    public interface ILevelManager
+    {
+        bool Ended { get; set; }
+        bool Waiting { get; set; }
+        void UpdateScore();
+        void LoadLevel();
+    }
+
+    public class LevelManager : MonoBehaviour, ILevelManager
     {
         public float matchDuration;
         private float matchEndTime;
         private float nextTimeUpdate;
-        [SerializeField] private TMP_Text timeoutText;
         public List<Block> blocks;
         private GameManager gameManager;
-        public int BlockCount;
         public int RedScore;
         public int BlueScore;
-        public bool Ended;
-        public bool Waiting;
+        public bool Ended { get; set; }
+        public bool Waiting { get; set; }
         public GameObject blueSpawn;
         public GameObject redSpawn;
         public GameObject bluePlayer;
@@ -27,7 +32,6 @@ namespace _Game.Scripts
         public float EndWaitingDuration;
         private float LevelStartTime;
         public CountDown countDown;
-        public Action onLevelLoaded;
         private float EndWaitingTime;
         private bool EndWaited;
 
@@ -39,6 +43,7 @@ namespace _Game.Scripts
 
         public void LoadLevel()
         {
+            gameObject.SetActive(true);
             Waiting = true;
             EndWaited = false;
 
@@ -58,8 +63,7 @@ namespace _Game.Scripts
 
             BlueScore = 0;
             RedScore = 0;
-            BlockCount = blocks.Count;
-            FindObjectOfType<ScoreProgress>().StartBlockCount(BlockCount);
+            gameManager.scoreProgress.StartBlockCount(blocks.Count);
             LevelStartTime = Time.time + WaitingTime;
             if (countDown)
             {
@@ -68,7 +72,6 @@ namespace _Game.Scripts
             }
 
             UpdateScore();
-            onLevelLoaded?.Invoke();
         }
 
         public void StartLevel()
@@ -99,13 +102,15 @@ namespace _Game.Scripts
 
             BlueScore = blueScore;
             RedScore = redScore;
-            FindObjectOfType<ScoreProgress>().UpdateProgress(RedScore, BlueScore);
+            gameManager.scoreProgress.UpdateProgress(RedScore, BlueScore);
         }
 
-        public void EndLevel()
+        private void EndLevel()
         {
             gameObject.SetActive(false);
             gameManager.EndLevel(BlueScore, RedScore);
+            bluePlayer.gameObject.SetActive(false);
+            redPlayer.gameObject.SetActive(false);
             EndWaited = true;
         }
 
@@ -132,7 +137,7 @@ namespace _Game.Scripts
             else if (Time.time > nextTimeUpdate && !Waiting)
             {
                 if (Time.time > EndWaitingTime) return;
-                timeoutText.text = ((int) (matchEndTime - Time.time)).ToString();
+                gameManager.timeOutText.text = ((int) (matchEndTime - Time.time)).ToString();
                 nextTimeUpdate = Time.time + 1f;
             }
         }
