@@ -42,3 +42,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3496768975
+    locked: 0
+  - name: Borders
+    uniqueID: 4100401579
+    locked: 0
+  - name: Wall
+    uniqueID: 1367825225
+    locked: 0
+  - name: Player
+    uniqueID: 2378699817
+    locked: 0

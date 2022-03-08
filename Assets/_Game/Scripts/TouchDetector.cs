@@ -1,4 +1,5 @@
 using System;
+using _Game.Scripts;
 using UnityEngine;
 
 namespace _ColorBrawl
@@ -8,7 +9,6 @@ namespace _ColorBrawl
         // Start is called before the first frame update
         public Character character;
         public int CollisionCount;
-        public LevelManager levelManager;
         public Action OnFirstTouch { get; set; }
 
         void OnTriggerEnter2D(Collider2D col)
@@ -19,10 +19,10 @@ namespace _ColorBrawl
             }
 
             CollisionCount++;
-            if (col.gameObject.tag == "Platform")
+            if (col.gameObject.CompareTag("Platform"))
             {
-                col.gameObject.GetComponent<Block>().SetOwner(character);
-                levelManager.UpdateScore();
+                col.gameObject.GetComponent<Block>().SetOwner(character.characterID);
+                character.LevelManager.UpdateScore();
             }
         }
 

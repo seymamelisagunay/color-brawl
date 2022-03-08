@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class CountDown : MonoBehaviour
 {
-    public GameObject hud;
     public TMPro.TMP_Text counDownText;
     private float nextTimeUpdate;
     private int counts;
     private bool countedDown;
+
     public void StartCountdown(int duration)
     {
         countedDown = false;
@@ -20,16 +21,14 @@ public class CountDown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(countedDown) return;
+        if (countedDown) return;
         if (Time.time > nextTimeUpdate)
         {
-         
             counts--;
             nextTimeUpdate = Time.time + 1f;
             counDownText.text = counts.ToString();
             if (counts < 1)
             {
-                hud.SetActive(true);
                 counDownText.text = "";
                 countedDown = true;
                 return;

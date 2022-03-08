@@ -1,28 +1,23 @@
 using System;
 using System.Collections.Generic;
+using _ColorBrawl.Scripts;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace _ColorBrawl
+namespace _Game.Scripts
 {
     public class LevelManager : MonoBehaviour
     {
-        public TMPro.TMP_Text redScoreText;
-        public TMPro.TMP_Text blueScoreText;
-        public TMPro.TMP_Text emptyAmountText;
-        public TMPro.TMP_Text timeoutText;
         public float matchDuration;
         private float matchEndTime;
         private float nextTimeUpdate;
-        public GameObject hud;
+        [SerializeField] private TMP_Text timeoutText;
         public List<Block> blocks;
         private GameManager gameManager;
         public int BlockCount;
         public int RedScore;
         public int BlueScore;
-        public Color defaultBlockColor;
         public bool Ended;
-
         public bool Waiting;
         public GameObject blueSpawn;
         public GameObject redSpawn;
@@ -46,7 +41,6 @@ namespace _ColorBrawl
         {
             Waiting = true;
             EndWaited = false;
-            hud.SetActive(true);
 
             bluePlayer.transform.position = blueSpawn.transform.position;
             redPlayer.transform.position = redSpawn.transform.position;
@@ -54,24 +48,18 @@ namespace _ColorBrawl
             matchEndTime = Time.time + matchDuration;
             EndWaitingTime = matchEndTime + EndWaitingDuration;
             Ended = false;
-            var platforms = GameObject.FindGameObjectsWithTag("Platform");
             blocks.Clear();
-            foreach (var platform in platforms)
+            var blockList = gameObject.GetComponentsInChildren<Block>();
+            foreach (var block in blockList)
             {
-                var block = platform.GetComponent<Block>();
-                Debug.Log(block.gameObject.name);
-                block.visual.gameObject.SetActive(true);
-                block.redSprite.gameObject.SetActive(false);
-                block.blueSprite.gameObject.SetActive(false);
-                block.ownerID = "";
+                block.SetOwner("empty");
                 blocks.Add(block);
             }
 
             BlueScore = 0;
             RedScore = 0;
             BlockCount = blocks.Count;
-            Debug.Log(BlockCount);
-            FindObjectOfType<Progress>().StartBlockCount(BlockCount);
+            FindObjectOfType<ScoreProgress>().StartBlockCount(BlockCount);
             LevelStartTime = Time.time + WaitingTime;
             if (countDown)
             {
@@ -81,14 +69,13 @@ namespace _ColorBrawl
 
             UpdateScore();
             onLevelLoaded?.Invoke();
-
         }
 
         public void StartLevel()
         {
             Waiting = false;
-            bluePlayer.GetComponent<Character>().EnableMovement();
-            redPlayer.GetComponent<Character>().EnableMovement();
+            bluePlayer.GetComponent<Character>().StartLevel(this);
+            redPlayer.GetComponent<Character>().StartLevel(this);
         }
 
         public void UpdateScore()
@@ -112,10 +99,7 @@ namespace _ColorBrawl
 
             BlueScore = blueScore;
             RedScore = redScore;
-            redScoreText.text = RedScore.ToString();
-            blueScoreText.text = BlueScore.ToString();
-            emptyAmountText.text = (BlockCount - RedScore - BlueScore).ToString();
-            FindObjectOfType<Progress>().UpdateProgress(RedScore, BlueScore);
+            FindObjectOfType<ScoreProgress>().UpdateProgress(RedScore, BlueScore);
         }
 
         public void EndLevel()
@@ -140,7 +124,6 @@ namespace _ColorBrawl
                 Ended = true;
                 bluePlayer.GetComponent<Character>().Stop();
                 redPlayer.GetComponent<Character>().Stop();
-                countDown.counDownText.text = "MATCH END";
             }
             else if (Waiting && Time.time > LevelStartTime)
             {

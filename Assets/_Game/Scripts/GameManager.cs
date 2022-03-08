@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _ColorBrawl;
+using _Game.Scripts;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -30,8 +31,8 @@ public class GameManager : MonoBehaviour
 
         lobbyPanel.SetActive(false);
         matchResultPanel.gameObject.SetActive(false);
-        var currentLevel = levels[currentLevelIndex];
-        // var currentLevel = levels[1];
+        // var currentLevel = levels[currentLevelIndex];
+        var currentLevel = levels[1];
         currentLevel.gameObject.SetActive(true);
         currentLevel.LoadLevel();
     }

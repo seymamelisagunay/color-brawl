@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using _Game.Scripts;
 using UnityEngine;
 
 public class BotAI : MonoBehaviour
