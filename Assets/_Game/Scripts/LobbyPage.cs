@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace _Game.Scripts
 {
@@ -49,6 +50,13 @@ namespace _Game.Scripts
             await Task.Delay(TimeSpan.FromSeconds(1));
             scoreProgress.SetNames("Self", enemyName);
             gameObject.SetActive(false);
+            gameManager.StartLevel();
+        }
+
+        public void ButtonPlayAgain()
+        {
+            enemyName = _nameList[Random.Range(0, _nameList.Length)];
+            scoreProgress.SetNames("Self", enemyName);
             gameManager.StartLevel();
         }
     }

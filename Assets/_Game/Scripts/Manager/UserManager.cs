@@ -35,6 +35,7 @@ public class UserManager : MonoBehaviour
     [SerializeField] private PoliciesPanel policiesPanel;
     [SerializeField] private NameChangePanel nameChangePanel;
     [SerializeField] private LobbyPage lobbyPage;
+    [SerializeField] private GameManager gameManager;
 
     public LeaderboardManager leaderboardManager;
     private bool _first;
@@ -61,7 +62,13 @@ public class UserManager : MonoBehaviour
     private void OnAcceptPolices()
     {
         GetUserData();
-        nameChangePanel.Show(LoadHome);
+        nameChangePanel.Show(LoadTutorial);
+    }
+
+    private void LoadTutorial()
+    {
+        leaderboardManager = new LeaderboardManager(UserModel.name);
+        gameManager.StartLevel();
     }
 
     private void OnDestroy()

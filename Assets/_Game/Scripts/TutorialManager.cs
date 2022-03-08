@@ -41,6 +41,7 @@ namespace _Game.Scripts
                 {
                     tapInstruction.text = "COMPLETED!";
                     endWaitingTime = Time.time + EndWaitingDuration;
+                    bluePlayer.Stop();
                     endWaiting = true;
                 }
             }
@@ -56,8 +57,9 @@ namespace _Game.Scripts
             }
         }
 
-        public void EndLevel()
+        private void EndLevel()
         {
+            Ended = true;
             gameObject.SetActive(false);
             gameManager.EndLevel(BlueScore, 0);
             EndWaited = true;
@@ -75,7 +77,6 @@ namespace _Game.Scripts
         {
             var blueScore = blocks.Count(block => block.ownerID == "blue");
             BlueScore = blueScore;
-            // FindObjectOfType<ScoreProgress>().UpdateProgress(RedScore, BlueScore);
         }
 
         public void LoadLevel()
