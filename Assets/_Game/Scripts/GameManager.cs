@@ -10,9 +10,10 @@ namespace _Game.Scripts
         public MatchResult matchResultPanel;
         public GameObject lobbyPanel;
         public TMP_Text timeOutText;
-        public List<LevelManager> levels;
         public TutorialManager tutorialManager;
         public ScoreProgress scoreProgress;
+        public CountDown countDown;
+        public List<LevelManager> levels;
 
         public int CurrentLevelIndex => PlayerPrefs.GetInt("currentLevelIndex", -1);
 

@@ -9,9 +9,9 @@ namespace _Game.Scripts.Playground
         public int height;
         public int width;
         public bool[,] Map;
-        public List<Unit> units;
         public Unit unitPrefab;
         public Transform parent;
+        public List<Unit> units;
 
         [ContextMenu("Create Borders")]
         public void CreateBorders()

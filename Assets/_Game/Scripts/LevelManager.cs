@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using _ColorBrawl.Scripts;
 using UnityEngine;
 
 namespace _Game.Scripts
@@ -20,22 +18,21 @@ namespace _Game.Scripts
         private float nextTimeUpdate;
         public List<Block> blocks;
         private GameManager gameManager;
-        public int RedScore;
-        public int BlueScore;
+        public int redScore;
+        public int blueScore;
         public bool Ended { get; set; }
         public bool Waiting { get; set; }
         public GameObject blueSpawn;
         public GameObject redSpawn;
-        public GameObject bluePlayer;
-        public GameObject redPlayer;
+        public Character bluePlayer;
+        public Character redPlayer;
         public float WaitingTime;
         public float EndWaitingDuration;
         private float LevelStartTime;
-        public CountDown countDown;
         private float EndWaitingTime;
         private bool EndWaited;
 
-        void Awake()
+        private void Awake()
         {
             gameManager = FindObjectOfType<GameManager>();
             Waiting = true;
@@ -61,14 +58,14 @@ namespace _Game.Scripts
                 blocks.Add(block);
             }
 
-            BlueScore = 0;
-            RedScore = 0;
+            blueScore = 0;
+            redScore = 0;
             gameManager.scoreProgress.StartBlockCount(blocks.Count);
             LevelStartTime = Time.time + WaitingTime;
-            if (countDown)
+            if (gameManager.countDown)
             {
-                countDown.gameObject.SetActive(true);
-                countDown.StartCountdown((int) WaitingTime);
+                gameManager.countDown.gameObject.SetActive(true);
+                gameManager.countDown.StartCountdown((int) WaitingTime);
             }
 
             UpdateScore();
@@ -77,8 +74,8 @@ namespace _Game.Scripts
         public void StartLevel()
         {
             Waiting = false;
-            bluePlayer.GetComponent<Character>().StartLevel(this);
-            redPlayer.GetComponent<Character>().StartLevel(this);
+            bluePlayer.StartLevel(this);
+            redPlayer.StartLevel(this);
         }
 
         public void UpdateScore()
@@ -100,15 +97,15 @@ namespace _Game.Scripts
                 }
             }
 
-            BlueScore = blueScore;
-            RedScore = redScore;
-            gameManager.scoreProgress.UpdateProgress(RedScore, BlueScore);
+            this.blueScore = blueScore;
+            this.redScore = redScore;
+            gameManager.scoreProgress.UpdateProgress(this.redScore, this.blueScore);
         }
 
         private void EndLevel()
         {
             gameObject.SetActive(false);
-            gameManager.EndLevel(BlueScore, RedScore);
+            gameManager.EndLevel(blueScore, redScore);
             bluePlayer.gameObject.SetActive(false);
             redPlayer.gameObject.SetActive(false);
             EndWaited = true;
