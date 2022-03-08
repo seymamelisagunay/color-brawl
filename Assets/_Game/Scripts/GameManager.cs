@@ -17,18 +17,9 @@ namespace _Game.Scripts
 
         public int CurrentLevelIndex => PlayerPrefs.GetInt("currentLevelIndex", -1);
 
-        private void Awake()
-        {
-            Application.targetFrameRate = 60;
-        }
-
-        private void Start()
-        {
-            StartLevel();
-        }
-
         public void StartLevel()
         {
+            scoreProgress.gameObject.SetActive(true);
             tutorialManager.gameObject.SetActive(false);
             foreach (var level in levels)
             {
