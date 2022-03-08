@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace _Game.Scripts
 
         public int CurrentLevelIndex => PlayerPrefs.GetInt("currentLevelIndex", -1);
 
+
         public void StartLevel()
         {
             scoreProgress.gameObject.SetActive(true);
@@ -28,10 +30,12 @@ namespace _Game.Scripts
             matchResultPanel.gameObject.SetActive(false);
             var currentLevel = CurrentLevelIndex == -1 ? (ILevelManager) tutorialManager : levels[CurrentLevelIndex];
             currentLevel.LoadLevel();
+            TinySauce.OnGameStarted($"{CurrentLevelIndex}");
         }
 
         public void EndLevel(int blueScore, int redScore)
         {
+            TinySauce.OnGameFinished(blueScore > redScore, blueScore, $"{CurrentLevelIndex}");
             matchResultPanel.gameObject.SetActive(true);
             matchResultPanel.Fill(blueScore, redScore);
             var nextLevelIndex = CurrentLevelIndex + 1;

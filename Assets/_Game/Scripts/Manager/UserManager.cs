@@ -57,6 +57,7 @@ public class UserManager : MonoBehaviour
             GetUserData();
             LoadHome();
         }
+
     }
 
     private void OnAcceptPolices()
