@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace _Game.Scripts.Playground
@@ -18,17 +17,15 @@ namespace _Game.Scripts.Playground
         {
             _controller = controller;
             var oldPosition = transform.localPosition;
-            var nextX = (int) oldPosition.x;
-            var nextY = (int) oldPosition.y;
+            var nextX = Mathf.RoundToInt(oldPosition.x);
+            var nextY = Mathf.RoundToInt(oldPosition.y);
+            transform.localPosition = new Vector3(nextX, nextY);
             _controller.Map[nextX, nextY] = true;
             cord = (nextX, nextY);
             isOutside = nextX == 0 || nextY == 0 || nextX == (controller.width - 1) ||
                         nextY == (controller.height - 1);
-
             if (Disable)
-            {
                 isOutside = true;
-            }
         }
 
         public void SetState()

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using _ColorBrawl.Scripts;
 using TMPro;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ namespace _Game.Scripts
     public class GameManager : MonoBehaviour
     {
         public MatchResult matchResultPanel;
-        public GameObject lobbyPanel;
+        public LobbyPage lobbyPanel;
         public TMP_Text timeOutText;
         public TutorialManager tutorialManager;
         public ScoreProgress scoreProgress;
@@ -17,25 +16,15 @@ namespace _Game.Scripts
 
         public int CurrentLevelIndex => PlayerPrefs.GetInt("currentLevelIndex", -1);
 
-        private void Awake()
-        {
-            Application.targetFrameRate = 60;
-        }
-
-        private void Start()
-        {
-            StartLevel();
-        }
-
         public void StartLevel()
         {
+            scoreProgress.gameObject.SetActive(true);
             tutorialManager.gameObject.SetActive(false);
             foreach (var level in levels)
             {
                 level.gameObject.SetActive(false);
             }
 
-            lobbyPanel.SetActive(false);
             matchResultPanel.gameObject.SetActive(false);
             var currentLevel = CurrentLevelIndex == -1 ? (ILevelManager) tutorialManager : levels[CurrentLevelIndex];
             currentLevel.LoadLevel();

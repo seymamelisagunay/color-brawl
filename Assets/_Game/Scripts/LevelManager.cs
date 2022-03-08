@@ -43,7 +43,10 @@ namespace _Game.Scripts
             gameObject.SetActive(true);
             Waiting = true;
             EndWaited = false;
-
+            bluePlayer.gameObject.SetActive(true);
+            redPlayer.gameObject.SetActive(true);
+            bluePlayer.Stop();
+            redPlayer.Stop();
             bluePlayer.transform.position = blueSpawn.transform.position;
             redPlayer.transform.position = redSpawn.transform.position;
 
@@ -124,8 +127,8 @@ namespace _Game.Scripts
             if (Time.time > matchEndTime)
             {
                 Ended = true;
-                bluePlayer.GetComponent<Character>().Stop();
-                redPlayer.GetComponent<Character>().Stop();
+                bluePlayer.Stop();
+                redPlayer.Stop();
             }
             else if (Waiting && Time.time > LevelStartTime)
             {
